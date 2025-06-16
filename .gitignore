@@ -39,3 +39,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Additional exclusions for deployment
+*.zip
+*.rar
+*.tar.gz
+.vscode/
+.idea/
+*.log
+.turbo/
+
+# Development documentation (optional)
+instructions-to-develop.md
+HEADER_HOVER_ENHANCEMENTS.md
+HEADER_IMPROVEMENTS.md
