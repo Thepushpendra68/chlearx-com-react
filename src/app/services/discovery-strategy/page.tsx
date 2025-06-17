@@ -905,10 +905,10 @@ export default function DiscoveryStrategyPage() {
                     <Button 
                       variant="outline" 
                       size="lg" 
-                      className="w-full sm:w-auto border-2 border-white text-white hover:bg-white hover:text-blue-600 font-semibold px-8 py-4 text-lg group"
+                      className="w-full sm:w-auto border-2 border-gray-300 hover:border-purple-600 text-white hover:text-white font-semibold px-8 py-4 text-lg group"
                     >
                       View Success Stories
-                      <TrophyIcon className="w-5 h-5 ml-2 group-hover:rotate-12 transition-transform" />
+                      <TrophyIcon className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
                     </Button>
                   </Link>
                 </div>
