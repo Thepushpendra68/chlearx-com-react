@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useCurrency } from '@/hooks/use-currency';
 
 // Custom styles to force center alignment
 const forceCenter = {
@@ -42,6 +43,7 @@ export default function DiscoveryStrategyPage() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [revenueProjection, setRevenueProjection] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { currencyInfo, isLoading, formatCurrency, formatCurrencyRange, convertToUSD, convertFromUSD } = useCurrency();
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -63,14 +65,25 @@ export default function DiscoveryStrategyPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       setRevenueProjection(prev => {
-        const target = 847000;
-        const increment = target / 200;
-        return prev < target ? prev + increment : target;
+        // For Indian users: ₹2 crores to ₹43 crores (equivalent to $2.3M to $5M USD)
+        // For USD users: $2.3M to $5M
+        const startAmount = currencyInfo.isIndia ? 20000000 : 2300000;  // ₹2 crores or $2.3M
+        const targetAmount = currencyInfo.isIndia ? 431200000 : 5000000; // ₹43.12 crores or $5M
+        
+        // Animation over 2 seconds (2000ms / 50ms = 40 steps)
+        const increment = (targetAmount - startAmount) / 40;
+        
+        // Start from the minimum amount if it's the first run
+        if (prev === 0) {
+          return startAmount;
+        }
+        
+        return prev < targetAmount ? prev + increment : targetAmount;
       });
     }, 50);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [currencyInfo.isIndia]);
 
   const strategicTools = [
     {
@@ -143,12 +156,28 @@ export default function DiscoveryStrategyPage() {
   // Interactive Revenue Calculator
   const [calculatorInputs, setCalculatorInputs] = useState({
     currentRevenue: 100000,
-    growthTarget: 300,
+    growthTarget: 50, // Reset to reasonable 50% growth
     timeframe: 12
   });
 
+  // Update default revenue based on currency when it loads
+  useEffect(() => {
+    if (!isLoading && currencyInfo.isIndia) {
+      setCalculatorInputs(prev => ({
+        ...prev,
+        currentRevenue: 8624000 // ₹86.24 lakh (reasonable amount for Indian businesses)
+      }));
+    }
+  }, [isLoading, currencyInfo.isIndia, currencyInfo.conversionRate]);
+
+  // Simple calculation - no need for complex conversions since input is already in user's currency
   const projectedRevenue = calculatorInputs.currentRevenue * (1 + calculatorInputs.growthTarget / 100);
   const monthlyGrowthRate = (calculatorInputs.growthTarget / calculatorInputs.timeframe).toFixed(1);
+  
+  // Investment calculation - convert investment amount to user's currency
+  const investmentUSD = 18750; // Average of 12500-25000
+  const investmentAmount = currencyInfo.isIndia ? investmentUSD * currencyInfo.conversionRate : investmentUSD;
+  const roiMultiplier = Math.round((projectedRevenue - calculatorInputs.currentRevenue) / investmentAmount);
 
   return (
     <>
@@ -268,7 +297,7 @@ export default function DiscoveryStrategyPage() {
                 >
                   <div className="text-sm text-gray-600 mb-2">Average Client Revenue Growth</div>
                   <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600">
-                    ${Math.floor(revenueProjection).toLocaleString()}
+                    {currencyInfo.symbol}{Math.floor(revenueProjection).toLocaleString(currencyInfo.isIndia ? 'en-IN' : 'en-US')}
                   </div>
                   <motion.div 
                     className="text-sm text-green-600 font-medium"
@@ -317,14 +346,109 @@ export default function DiscoveryStrategyPage() {
                     </Button>
                   </Link>
                   <Link href="/audit">
-                    <Button 
-                      variant="outline" 
-                      size="lg" 
-                      className="w-full sm:w-auto border-2 border-gray-300 hover:border-blue-600 hover:text-blue-600 font-semibold px-8 py-4 text-lg group"
+                    <motion.div
+                      className="relative overflow-hidden rounded-lg"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
                     >
-                      Free Strategic Audit
-                      <BeakerIcon className="w-5 h-5 ml-2 group-hover:rotate-12 transition-transform" />
-                    </Button>
+                      <Button 
+                        variant="outline" 
+                        size="lg" 
+                        className="w-full sm:w-auto border-2 border-gray-300 hover:border-blue-600 hover:text-blue-600 font-semibold px-8 py-4 text-lg group relative overflow-hidden bg-white hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-500"
+                      >
+                        {/* Animated background gradient */}
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-10"
+                          initial={{ x: "-100%" }}
+                          whileHover={{ x: "100%" }}
+                          transition={{ duration: 0.6, ease: "easeInOut" }}
+                        />
+                        
+                        {/* Sparkle effect */}
+                        <motion.div
+                          className="absolute top-1/2 left-1/2 w-2 h-2 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100"
+                          initial={{ scale: 0, x: "-50%", y: "-50%" }}
+                          whileHover={{ 
+                            scale: [0, 1, 0],
+                            x: ["-50%", "-200%", "-50%"],
+                            y: ["-50%", "-200%", "-50%"]
+                          }}
+                          transition={{ duration: 0.8, delay: 0.2 }}
+                        />
+                        <motion.div
+                          className="absolute top-1/2 left-1/2 w-1 h-1 bg-purple-400 rounded-full opacity-0 group-hover:opacity-100"
+                          initial={{ scale: 0, x: "-50%", y: "-50%" }}
+                          whileHover={{ 
+                            scale: [0, 1, 0],
+                            x: ["-50%", "200%", "-50%"],
+                            y: ["-50%", "150%", "-50%"]
+                          }}
+                          transition={{ duration: 0.9, delay: 0.4 }}
+                        />
+                        
+                        {/* Floating border animation */}
+                        <motion.div
+                          className="absolute inset-0 border-2 border-transparent rounded-lg"
+                          style={{
+                            background: "linear-gradient(45deg, #3b82f6, #8b5cf6, #3b82f6) border-box",
+                            mask: "linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)",
+                            maskComposite: "exclude"
+                          }}
+                          animate={{
+                            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
+                          }}
+                          transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            ease: "linear"
+                          }}
+                        />
+                        
+                        <span className="relative z-10 flex items-center">
+                          <motion.span
+                            animate={{ 
+                              textShadow: [
+                                "0 0 0px rgba(59, 130, 246, 0)",
+                                "0 0 20px rgba(59, 130, 246, 0.5)",
+                                "0 0 0px rgba(59, 130, 246, 0)"
+                              ]
+                            }}
+                            transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                          >
+                            Free Strategic Audit
+                          </motion.span>
+                          <motion.div
+                            className="ml-2"
+                            animate={{ 
+                              rotate: [0, 360],
+                              scale: [1, 1.2, 1]
+                            }}
+                            transition={{ 
+                              duration: 2, 
+                              repeat: Infinity,
+                              ease: "easeInOut"
+                            }}
+                          >
+                            <BeakerIcon className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                          </motion.div>
+                        </span>
+                        
+                        {/* Pulse effect on hover */}
+                        <motion.div
+                          className="absolute inset-0 border-2 border-blue-400 rounded-lg opacity-0 group-hover:opacity-100"
+                          animate={{
+                            scale: [1, 1.05, 1],
+                            opacity: [0, 0.5, 0]
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                          }}
+                        />
+                      </Button>
+                    </motion.div>
                   </Link>
                 </motion.div>
               </motion.div>
@@ -447,12 +571,15 @@ export default function DiscoveryStrategyPage() {
                           Current Annual Revenue
                         </label>
                         <div className="relative">
-                          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 z-10">
+                            {isLoading ? '$' : currencyInfo.symbol}
+                          </span>
                           <input
                             type="number"
-                            className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                            className="w-full pl-10 pr-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-white text-gray-900 font-medium shadow-sm"
                             value={calculatorInputs.currentRevenue}
                             onChange={(e) => setCalculatorInputs(prev => ({ ...prev, currentRevenue: Number(e.target.value) }))}
+                            placeholder="Enter your current revenue"
                           />
                         </div>
                       </div>
@@ -484,7 +611,7 @@ export default function DiscoveryStrategyPage() {
                           Timeframe (months)
                         </label>
                         <select
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                          className="w-full p-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 bg-white text-gray-900 font-medium shadow-sm appearance-none"
                           value={calculatorInputs.timeframe}
                           onChange={(e) => setCalculatorInputs(prev => ({ ...prev, timeframe: Number(e.target.value) }))}
                         >
@@ -498,7 +625,7 @@ export default function DiscoveryStrategyPage() {
 
                     {/* Results Display */}
                     <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl p-6 text-white">
-                      <h3 className="text-xl font-bold mb-6">Your Growth Projection</h3>
+                      <h3 className="text-xl font-bold mb-6 text-white">Your Growth Projection</h3>
                       
                       <div className="space-y-4">
                         <div>
@@ -510,7 +637,7 @@ export default function DiscoveryStrategyPage() {
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ duration: 0.3 }}
                           >
-                            ${projectedRevenue.toLocaleString()}
+                            {currencyInfo.symbol}{projectedRevenue.toLocaleString(currencyInfo.isIndia ? 'en-IN' : 'en-US')}
                           </motion.div>
                         </div>
 
@@ -522,7 +649,7 @@ export default function DiscoveryStrategyPage() {
                         <div>
                           <div className="text-sm opacity-90">Additional Revenue</div>
                           <div className="text-2xl font-bold text-green-300">
-                            +${(projectedRevenue - calculatorInputs.currentRevenue).toLocaleString()}
+                            +{currencyInfo.symbol}{(projectedRevenue - calculatorInputs.currentRevenue).toLocaleString(currencyInfo.isIndia ? 'en-IN' : 'en-US')}
                           </div>
                         </div>
                       </div>
@@ -532,9 +659,11 @@ export default function DiscoveryStrategyPage() {
                         whileHover={{ scale: 1.02 }}
                       >
                         <div className="text-sm opacity-90 mb-2">Strategic Discovery Investment</div>
-                        <div className="text-lg font-bold">$12,500 - $25,000</div>
+                        <div className="text-lg font-bold">
+                          {currencyInfo.symbol}{(12500 * (currencyInfo.isIndia ? currencyInfo.conversionRate : 1)).toLocaleString(currencyInfo.isIndia ? 'en-IN' : 'en-US')} - {currencyInfo.symbol}{(25000 * (currencyInfo.isIndia ? currencyInfo.conversionRate : 1)).toLocaleString(currencyInfo.isIndia ? 'en-IN' : 'en-US')}
+                        </div>
                         <div className="text-xs opacity-75 mt-1">
-                          ROI: {((projectedRevenue - calculatorInputs.currentRevenue) / 18750 * 100).toFixed(0)}x return
+                          ROI: {roiMultiplier}x return
                         </div>
                       </motion.div>
                     </div>
@@ -819,7 +948,7 @@ export default function DiscoveryStrategyPage() {
                   <span className="text-sm font-medium">Only 3 strategic discovery spots available this month</span>
                 </motion.div>
 
-                <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
                   Ready to Unlock Your Strategic Advantage?
                 </h2>
                 
@@ -829,7 +958,7 @@ export default function DiscoveryStrategyPage() {
                   opacity: '0.98'
                 }}>
                   Don't let another quarter pass without a clear strategic direction. 
-                  Our discovery process has generated over $50M in additional revenue for our clients.
+                  Our discovery process has generated over {currencyInfo.symbol}{(36200000 * (currencyInfo.isIndia ? currencyInfo.conversionRate : 1)).toLocaleString(currencyInfo.isIndia ? 'en-IN' : 'en-US')} in additional revenue for our clients.
                 </p>
                 
                 <div className="flex flex-col sm:flex-row gap-6 justify-center">
@@ -896,7 +1025,7 @@ export default function DiscoveryStrategyPage() {
               transition={{ duration: 4, repeat: Infinity }}
             >
               <div className="bg-white/20 backdrop-blur-sm p-3 rounded-lg text-white text-center">
-                <div className="text-lg font-bold">$50M+</div>
+                <div className="text-lg font-bold">{currencyInfo.symbol}{(36200000 * (currencyInfo.isIndia ? currencyInfo.conversionRate : 1)).toLocaleString(currencyInfo.isIndia ? 'en-IN' : 'en-US')}+</div>
                 <div className="text-xs">Revenue Generated</div>
               </div>
             </motion.div>
