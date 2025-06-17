@@ -252,19 +252,25 @@ export default function DiscoveryStrategyPage() {
                     />
                   </div>
                   
-                  {/* Floating Metrics */}
+                  {/* Floating Strategic Metrics */}
                   <motion.div
-                    className="absolute -top-2 -right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold"
-                    animate={{ y: [-5, 5, -5] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    className="absolute -top-4 -right-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-full text-sm font-bold"
+                    animate={{ 
+                      y: [-10, 10, -10],
+                      rotate: [-5, 5, -5]
+                    }}
+                    transition={{ duration: 3, repeat: Infinity }}
                   >
                     98% Success
                   </motion.div>
                   
                   <motion.div
-                    className="absolute -bottom-2 -left-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold"
-                    animate={{ y: [5, -5, 5] }}
-                    transition={{ duration: 2.5, repeat: Infinity }}
+                    className="absolute -bottom-4 -left-6 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full text-sm font-bold"
+                    animate={{ 
+                      y: [10, -10, 10],
+                      rotate: [5, -5, 5]
+                    }}
+                    transition={{ duration: 3.5, repeat: Infinity }}
                   >
                     247 Strategies
                   </motion.div>
@@ -346,111 +352,14 @@ export default function DiscoveryStrategyPage() {
                     </Button>
                   </Link>
                   <Link href="/audit">
-                    <motion.div
-                      className="relative overflow-hidden rounded-lg"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    <Button 
+                      variant="outline" 
+                      size="lg" 
+                      className="w-full sm:w-auto border-2 border-gray-300 hover:border-blue-600 hover:text-blue-600 font-semibold px-8 py-4 text-lg group"
                     >
-                      <Button 
-                        variant="outline" 
-                        size="lg" 
-                        className="w-full sm:w-auto border-2 border-gray-300 hover:border-blue-600 hover:text-blue-600 font-semibold px-8 py-4 text-lg group relative overflow-hidden bg-white hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-500"
-                      >
-                        {/* Animated background gradient */}
-                        <motion.div
-                          className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-10"
-                          initial={{ x: "-100%" }}
-                          whileHover={{ x: "100%" }}
-                          transition={{ duration: 0.6, ease: "easeInOut" }}
-                        />
-                        
-                        {/* Sparkle effect */}
-                        <motion.div
-                          className="absolute top-1/2 left-1/2 w-2 h-2 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100"
-                          initial={{ scale: 0, x: "-50%", y: "-50%" }}
-                          whileHover={{ 
-                            scale: [0, 1, 0],
-                            x: ["-50%", "-200%", "-50%"],
-                            y: ["-50%", "-200%", "-50%"]
-                          }}
-                          transition={{ duration: 0.8, delay: 0.2 }}
-                        />
-                        <motion.div
-                          className="absolute top-1/2 left-1/2 w-1 h-1 bg-purple-400 rounded-full opacity-0 group-hover:opacity-100"
-                          initial={{ scale: 0, x: "-50%", y: "-50%" }}
-                          whileHover={{ 
-                            scale: [0, 1, 0],
-                            x: ["-50%", "200%", "-50%"],
-                            y: ["-50%", "150%", "-50%"]
-                          }}
-                          transition={{ duration: 0.9, delay: 0.4 }}
-                        />
-                        
-                        {/* Floating border animation */}
-                        <motion.div
-                          className="absolute inset-0 border-2 border-transparent rounded-lg"
-                          style={{
-                            background: "linear-gradient(45deg, #3b82f6, #8b5cf6, #3b82f6) border-box",
-                            mask: "linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)",
-                            maskComposite: "exclude"
-                          }}
-                          animate={{
-                            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
-                          }}
-                          transition={{
-                            duration: 3,
-                            repeat: Infinity,
-                            ease: "linear"
-                          }}
-                        />
-                        
-                        <span className="relative z-10 flex items-center">
-                          <motion.span
-                            className="font-semibold"
-                            style={{ color: '#1e3a8a !important' }}
-                            animate={{ 
-                              textShadow: [
-                                "0 0 0px rgba(59, 130, 246, 0)",
-                                "0 0 15px rgba(59, 130, 246, 0.4)",
-                                "0 0 0px rgba(59, 130, 246, 0)"
-                              ]
-                            }}
-                            transition={{ duration: 2, repeat: Infinity, delay: 1 }}
-                          >
-                            Free Strategic Audit
-                          </motion.span>
-                          <motion.div
-                            className="ml-2"
-                            animate={{ 
-                              rotate: [0, 360],
-                              scale: [1, 1.2, 1]
-                            }}
-                            transition={{ 
-                              duration: 2, 
-                              repeat: Infinity,
-                              ease: "easeInOut"
-                            }}
-                          >
-                            <BeakerIcon className="w-5 h-5" style={{ color: '#1e3a8a !important' }} />
-                          </motion.div>
-                        </span>
-                        
-                        {/* Pulse effect on hover */}
-                        <motion.div
-                          className="absolute inset-0 border-2 border-blue-400 rounded-lg opacity-0 group-hover:opacity-100"
-                          animate={{
-                            scale: [1, 1.05, 1],
-                            opacity: [0, 0.5, 0]
-                          }}
-                          transition={{
-                            duration: 1.5,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                          }}
-                        />
-                      </Button>
-                    </motion.div>
+                      Free Strategic Audit
+                      <BeakerIcon className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
+                    </Button>
                   </Link>
                 </motion.div>
               </motion.div>
@@ -510,28 +419,37 @@ export default function DiscoveryStrategyPage() {
                 {liveMetrics.map((metric, index) => (
                   <motion.div
                     key={metric.label}
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     viewport={{ once: true }}
-                    whileHover={{ scale: 1.05, y: -5 }}
+                    whileHover={{ 
+                      scale: 1.05, 
+                      y: -15,
+                      rotateY: 10
+                    }}
+                    className="group cursor-pointer"
                   >
-                    <Card className="p-6 text-center hover:shadow-xl transition-all duration-300 bg-white/80 backdrop-blur-sm border border-white/20">
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                        {React.createElement(metric.icon, { className: "w-6 h-6 text-white" })}
+                    <Card className="p-6 text-center hover:shadow-2xl transition-all duration-500 bg-white/90 backdrop-blur-sm border border-white/20 relative overflow-hidden">
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-500 opacity-0 group-hover:opacity-15 transition-opacity duration-500"
+                      />
+                      
+                      <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                        {React.createElement(metric.icon, { className: "w-8 h-8 text-white" })}
                       </div>
                       
                       <motion.div 
-                        className="text-3xl font-bold text-gray-900 mb-2"
+                        className="text-4xl font-bold text-gray-900 mb-2"
                         animate={{ scale: [1, 1.1, 1] }}
                         transition={{ duration: 2, repeat: Infinity, delay: index * 0.5 }}
                       >
                         {metric.value}
                       </motion.div>
                       
-                      <div className="text-sm text-gray-600 mb-2">{metric.label}</div>
+                      <div className="text-sm text-gray-600 mb-3">{metric.label}</div>
                       
-                      <div className="text-xs text-green-600 font-medium bg-green-100 px-2 py-1 rounded-full">
+                      <div className="text-xs text-green-600 font-medium bg-green-100 px-3 py-1 rounded-full">
                         {metric.trend} this month
                       </div>
                     </Card>

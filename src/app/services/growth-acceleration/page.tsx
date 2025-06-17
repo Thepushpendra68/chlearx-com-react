@@ -304,23 +304,23 @@ export default function GrowthAccelerationPage() {
                   
                   {/* Growth Metrics Floating */}
                   <motion.div
-                    className="absolute -top-4 -right-8 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-full text-sm font-bold"
+                    className="absolute -top-4 -right-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-full text-sm font-bold"
                     animate={{ 
-                      y: [-15, 15, -15],
-                      rotate: [-10, 10, -10]
+                      y: [-10, 10, -10],
+                      rotate: [-5, 5, -5]
                     }}
-                    transition={{ duration: 4, repeat: Infinity }}
+                    transition={{ duration: 3, repeat: Infinity }}
                   >
                     +340% Growth
                   </motion.div>
                   
                   <motion.div
-                    className="absolute -bottom-4 -left-8 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full text-sm font-bold"
+                    className="absolute -bottom-4 -left-6 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full text-sm font-bold"
                     animate={{ 
-                      y: [15, -15, 15],
-                      rotate: [10, -10, 10]
+                      y: [10, -10, 10],
+                      rotate: [5, -5, 5]
                     }}
-                    transition={{ duration: 3, repeat: Infinity }}
+                    transition={{ duration: 3.5, repeat: Infinity }}
                   >
                     12.3x ROAS
                   </motion.div>
@@ -731,7 +731,10 @@ export default function GrowthAccelerationPage() {
                   <span className="font-medium">Limited growth acceleration spots - 3 clients this quarter</span>
                 </motion.div>
 
-                <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                <h2 className="text-4xl md:text-5xl font-bold mb-6" style={{
+                  color: '#ffffff !important',
+                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.8)'
+                }}>
                   Ready to Accelerate Your Growth?
                 </h2>
                 

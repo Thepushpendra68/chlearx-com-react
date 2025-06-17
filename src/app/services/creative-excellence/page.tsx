@@ -52,6 +52,41 @@ import {
 
 export default function CreativeExcellencePage() {
   const [activePortfolioItem, setActivePortfolioItem] = useState(0);
+
+  // Force white text styles with highest specificity
+  React.useEffect(() => {
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      /* Force white text with maximum specificity */
+      [data-creative-title="true"] {
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9) !important;
+        font-size: clamp(2.5rem, 8vw, 4rem) !important;
+        font-weight: 900 !important;
+        margin-bottom: 1.5rem !important;
+        line-height: 1.1 !important;
+      }
+      
+      [data-key-features="true"] {
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
+        text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9) !important;
+        font-size: 0.875rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 0.75rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+    
+    return () => {
+      if (document.head.contains(styleElement)) {
+        document.head.removeChild(styleElement);
+      }
+    };
+  }, []);
   const [colorPalette, setColorPalette] = useState(['#3B82F6', '#8B5CF6', '#EC4899', '#F59E0B']);
   const [isCreativeMode, setIsCreativeMode] = useState(false);
   const [conversionRate, setConversionRate] = useState(0);
@@ -659,13 +694,13 @@ export default function CreativeExcellencePage() {
                       </p>
 
                       <div className="mb-6">
-                        <h4 className="text-sm font-medium text-purple-300 mb-3">Key Features</h4>
+                        <h4 data-key-features="true">Key Features</h4>
                         <ul className="space-y-2">
                           {service.features.map((feature) => (
-                            <li key={feature} className="flex items-center text-white text-sm" style={{
-                              color: '#ffffff !important',
-                              textShadow: '0 2px 4px rgba(0, 0, 0, 0.8)',
-                              opacity: '0.9'
+                            <li key={feature} className="flex items-center text-sm" style={{
+                              color: 'white !important',
+                              textShadow: '0 2px 4px rgba(0, 0, 0, 0.8) !important',
+                              opacity: '1 !important'
                             }}>
                               <CheckCircleIcon className="w-4 h-4 text-green-400 mr-2 flex-shrink-0" />
                               {feature}
@@ -815,7 +850,7 @@ export default function CreativeExcellencePage() {
                   <span className="font-medium">Limited creative slots available - 5 projects this month</span>
                 </motion.div>
 
-                <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                <h2 data-creative-title="true">
                   Ready to Transform Your Brand?
                 </h2>
                 
