@@ -407,10 +407,11 @@ export default function DiscoveryStrategyPage() {
                         
                         <span className="relative z-10 flex items-center">
                           <motion.span
+                            className="text-gray-800 font-semibold"
                             animate={{ 
                               textShadow: [
                                 "0 0 0px rgba(59, 130, 246, 0)",
-                                "0 0 20px rgba(59, 130, 246, 0.5)",
+                                "0 0 15px rgba(59, 130, 246, 0.3)",
                                 "0 0 0px rgba(59, 130, 246, 0)"
                               ]
                             }}
@@ -430,7 +431,7 @@ export default function DiscoveryStrategyPage() {
                               ease: "easeInOut"
                             }}
                           >
-                            <BeakerIcon className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                            <BeakerIcon className="w-5 h-5 text-gray-800 group-hover:rotate-12 transition-transform" />
                           </motion.div>
                         </span>
                         
